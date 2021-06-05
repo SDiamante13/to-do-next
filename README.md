@@ -1,3 +1,10 @@
+# to-do-next
+
+___
+
+Task manager. What do I do next? This app uses Next.js, Typescript, Jest, & React Testing Library.
+
+
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## Getting Started
