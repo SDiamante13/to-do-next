@@ -2,6 +2,24 @@ import React, { useEffect, useState } from 'react';
 import uuid from 'uuid-random';
 import { Task, Tasks } from "../interfaces/interfaces"
 
+interface TaskListProps {
+  tasks: Tasks;
+  onCompleted: (taskId: string) => (event: React.ChangeEvent<HTMLInputElement>) => {};
+}
+
+const TaskList = ({ tasks, onCompleted }: TaskListProps) => {
+  return (
+    <>
+      {tasks.filter(task => !task.completed)
+        .map(task => (
+          <div key={task.id}>
+            <input id="task" type="checkbox" checked={task.completed} onChange={onCompleted(task.id)}></input>
+            <label htmlFor="task">{task.name}</label>
+          </div>
+        ))}
+    </>)
+}
+
 const Home = () => {
   const initialState = {
     id: "",
@@ -34,22 +52,11 @@ const Home = () => {
     }
   }
 
-  const handleCheckBoxEvent = (taskId) => (event: React.ChangeEvent<HTMLInputElement>) => {
-    console.log(`taskId: ${taskId}`);
-    console.log(`check pressed ${event.target.value}`);
-    const newTasks = tasks.map(task => task.id === taskId ? {...task, completed: true} : task)
+  const handleCheckBoxEvent = (taskId: string) => (event: React.ChangeEvent<HTMLInputElement>): any => {
+    console.log(`check box with taskId has been pressed: ${taskId}`);
+    const newTasks = tasks.map(task => task.id === taskId ? { ...task, completed: true } : task)
     setTasks(newTasks);
   }
-
-  const listItems = tasks.filter(task => !task.completed)
-    .map((task) => {
-      return (
-        <div>
-          <input id="task" type="checkbox" checked={task.completed} onChange={handleCheckBoxEvent(task.id)}></input>
-          <label htmlFor="task" key={task.id}>{task.name}</label>
-        </div>
-      )
-    });
 
   return (
     <div>
@@ -65,7 +72,7 @@ const Home = () => {
           onChange={handleChangeEvent}
           onKeyPress={handleKeyEvent} />
       </div>
-      {listItems}
+      <TaskList tasks={tasks} onCompleted={handleCheckBoxEvent} />
     </div>
   )
 };
