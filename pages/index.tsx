@@ -34,9 +34,22 @@ const Home = () => {
     }
   }
 
-  const listItems = tasks.map((task) =>
-    <li key={task.id}>{task.name}</li>
-  );
+  const handleCheckBoxEvent = (taskId) => (event: React.ChangeEvent<HTMLInputElement>) => {
+    console.log(`taskId: ${taskId}`);
+    console.log(`check pressed ${event.target.value}`);
+    const newTasks = tasks.map(task => task.id === taskId ? {...task, completed: true} : task)
+    setTasks(newTasks);
+  }
+
+  const listItems = tasks.filter(task => !task.completed)
+    .map((task) => {
+      return (
+        <div>
+          <input id="task" type="checkbox" checked={task.completed} onChange={handleCheckBoxEvent(task.id)}></input>
+          <label htmlFor="task" key={task.id}>{task.name}</label>
+        </div>
+      )
+    });
 
   return (
     <div>
@@ -52,11 +65,7 @@ const Home = () => {
           onChange={handleChangeEvent}
           onKeyPress={handleKeyEvent} />
       </div>
-      <div>
-        <ul>
-          {listItems}
-        </ul>
-      </div>
+      {listItems}
     </div>
   )
 };
